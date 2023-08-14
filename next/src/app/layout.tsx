@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
-import { SessionProvider } from "next-auth/react";
+import AuthContext from "./context/AuthContext";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
 
@@ -17,15 +17,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SessionProvider>
-      <html lang="en" className={openSans.className}>
-        <body className="relative flex flex-col items-center">
+    <html lang="en" className={openSans.className}>
+      <body className="relative flex flex-col items-center">
+        <AuthContext>
           <Header />
           <main className="w-full px-6 mx-auto mt-16 grow max-w-7xl">
             {children}
           </main>
-        </body>
-      </html>
-    </SessionProvider>
+        </AuthContext>
+      </body>
+    </html>
   );
 }

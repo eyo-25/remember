@@ -4,6 +4,10 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icons } from "./icons/icons";
+import { useSession, signIn, signOut } from "next-auth/react";
+import Button from "./Button";
+import Image from "next/image";
+import Avartar from "./Avartar";
 
 const LINKS = [
   {
@@ -25,6 +29,8 @@ const LINKS = [
 
 export default function Header() {
   const path = usePathname();
+  const { data: session } = useSession();
+  const user = session?.user;
 
   return (
     <header className="fixed top-0 z-10 w-full h-16 bg-white">
@@ -46,9 +52,12 @@ export default function Header() {
               </li>
             ))}
           </ul>
-          <button className="p-2 ml-4 text-white bg-black rounded">
-            Sign in
-          </button>
+          {user && <Avartar user={user} />}
+          {session ? (
+            <Button text={"LogOut"} onClick={() => signOut()} />
+          ) : (
+            <Button text={"SignIn"} onClick={() => signIn()} />
+          )}
         </nav>
       </div>
     </header>

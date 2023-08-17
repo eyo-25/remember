@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import AuthContext from "./context/AuthContext";
+import SwrconfigContext from "./context/SwrconfigContext";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
 
@@ -21,8 +22,8 @@ export default function RootLayout({
       <body className="relative flex flex-col items-center">
         <AuthContext>
           <Header />
-          <main className="w-full px-6 mx-auto mt-16 grow max-w-7xl">
-            {children}
+          <main className="flex justify-center w-full min-h-full px-6 mx-auto mt-16 grow max-w-7xl">
+            <SwrconfigContext>{children}</SwrconfigContext>
           </main>
         </AuthContext>
       </body>

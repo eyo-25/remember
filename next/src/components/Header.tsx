@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { Icons } from "./icons/icons";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Button from "./Button";
-import Image from "next/image";
 import Avartar from "./Avartar";
 
 const LINKS = [
@@ -52,7 +51,11 @@ export default function Header() {
               </li>
             ))}
           </ul>
-          {user && <Avartar user={user} />}
+          {user && (
+            <Link className="ml-5" href={`/user/${user.username}`}>
+              <Avartar highlight={true} size="small" image={user.image} />
+            </Link>
+          )}
           {session ? (
             <Button text={"LogOut"} onClick={() => signOut()} />
           ) : (

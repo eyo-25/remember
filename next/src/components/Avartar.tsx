@@ -1,27 +1,40 @@
-import Image from "next/image";
-import Link from "next/link";
-
 type Props = {
-  user: {
-    username: string;
-    image?: string;
-  };
+  image?: string;
+  size?: "small" | "normal";
+  highlight?: boolean;
 };
 
-export default function Avartar({ user }: Props) {
-  const { username, image } = user;
-
+export default function Avartar({
+  image,
+  size = "normal",
+  highlight = false,
+}: Props) {
   return (
-    <>
-      <Link href={`/user/${username}`}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="w-10 h-10 ml-5"
-          src={image ?? undefined}
-          referrerPolicy="no-referrer"
-          alt="user profile"
-        />
-      </Link>
-    </>
+    <div className={getContainerStyle(size, highlight)}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        className={`bg-white object-cover rounded-full ${geImageSizeStyle(
+          size
+        )}`}
+        src={image ?? undefined}
+        referrerPolicy="no-referrer"
+        alt="user profile"
+      />
+    </div>
   );
+}
+
+function getContainerStyle(size: string, highlight: boolean): string {
+  const baseStyle = "rounded-full flex justify-center items-center";
+  const hightlightStyle = highlight
+    ? "bg-gradient-to-bl from-fuchsia-600 via-rose-500 to-amber-300"
+    : "";
+  const sizeStyle = size === "small" ? "w-9 h-9" : "w-[68px] h-[68px]";
+  return `${baseStyle} ${hightlightStyle} ${sizeStyle}`;
+}
+
+function geImageSizeStyle(size: string): string {
+  return size === "small"
+    ? "w-[34px] h-[34px] p-[0.1rem]"
+    : "w-16 h-16 p-[0.2rem]";
 }

@@ -19,13 +19,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={openSans.className}>
-      <body className="relative flex flex-col items-center">
+      <body className="relative flex flex-col items-center bg-neutral-50">
         <AuthContext>
           <Header />
-          <main className="flex justify-center w-full min-h-full px-6 mx-auto mt-16 grow max-w-7xl">
-            <SwrconfigContext>{children}</SwrconfigContext>
+          <main className="flex justify-center w-full min-h-full mt-16 grow">
+            <div className="px-6  max-w-7xl">
+              <SwrconfigContext>{children}</SwrconfigContext>
+            </div>
           </main>
         </AuthContext>
+        <div id="portal" />
       </body>
     </html>
   );

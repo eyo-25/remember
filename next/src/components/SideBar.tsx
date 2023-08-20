@@ -1,8 +1,8 @@
-import { User } from "@/model/user";
+import { AuthUser } from "@/model/user";
 import Avartar from "./Avartar";
 
 type Props = {
-  user: User;
+  user: AuthUser;
 };
 
 function SideBar({ user: { name, username, image } }: Props) {

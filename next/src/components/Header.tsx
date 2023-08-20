@@ -52,7 +52,7 @@ export default function Header() {
             ))}
           </ul>
           {user && (
-            <Link className="ml-5" href={`/user/${user.username}`}>
+            <Link className="mx-5" href={`/user/${user.username}`}>
               <Avartar highlight={true} size="small" image={user.image} />
             </Link>
           )}

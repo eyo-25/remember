@@ -33,12 +33,7 @@ function PostListCard({ post, priority = false }: Props) {
         height={500}
         priority={priority}
       />
-      <ActionBar
-        likes={likes}
-        text={text}
-        username={username}
-        createdAt={createdAt}
-      />
+      <ActionBar post={post} />
       <CommentForm />
       {openModal && (
         <ModalPortal>

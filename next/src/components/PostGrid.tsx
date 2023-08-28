@@ -8,13 +8,14 @@ type Props = {
   query: string;
 };
 
+export const dynamic = "force-dynamic";
+
 export default function PostGrid({ username, query }: Props) {
   const {
     data: posts,
     isLoading,
     error,
   } = useSWR<SimplePost[]>(`/api/users/${username}/${query}`);
-  console.log(posts);
 
   return (
     <div className="relative w-full text-center aspect-square">

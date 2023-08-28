@@ -7,6 +7,8 @@ type Context = {
   };
 };
 
+export const dynamic = "force-dynamic";
+
 export async function GET(_: NextRequest, context: Context) {
   const { slug } = context.params;
 

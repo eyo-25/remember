@@ -1,6 +1,6 @@
 "use client";
 
-import { ProrfileUser } from "@/model/user";
+import { ProfileUser } from "@/model/user";
 import { useState } from "react";
 import PostIcon from "./icons/PostIcon";
 import BookmarkIcon from "./icons/BookmarkIcon";
@@ -8,8 +8,9 @@ import HeartIcon from "./icons/HeartIcon";
 import PostGrid from "./PostGrid";
 
 type Props = {
-  user: ProrfileUser;
+  user: ProfileUser;
 };
+
 const tabs = [
   { type: "posts", icon: <PostIcon style="w-3 h-3" /> },
   { type: "saved", icon: <BookmarkIcon style="w-3 h-3" /> },
@@ -17,7 +18,6 @@ const tabs = [
 ];
 
 export default function UserPosts({ user: { username } }: Props) {
-  // /api/users/${username}/posts
   const [query, setquery] = useState(tabs[0].type);
 
   return (

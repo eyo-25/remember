@@ -1,21 +1,19 @@
 "use client";
+
 import Avartar from "@/components/Avartar";
 import ScrollableBar from "@/components/ScrollableBar";
-import { HomeUser } from "@/model/user";
+import useMe from "@/hooks/useMe";
 import Link from "next/link";
 import { PropagateLoader } from "react-spinners";
-import useSWR from "swr";
 
 export default function FollowingBar() {
-  const { data, isLoading: loading, error } = useSWR<HomeUser>("/api/me");
-  // const users = data?.following;
-  // const users = undefined;
+  const { user, isLoading: loading, error } = useMe();
 
-  const users = data?.following && [
-    ...data?.following,
-    ...data?.following,
-    ...data?.following,
-    ...data?.following,
+  const users = user?.following && [
+    ...user?.following,
+    ...user?.following,
+    ...user?.following,
+    ...user?.following,
   ];
 
   return (

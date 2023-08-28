@@ -1,9 +1,9 @@
-import { ProrfileUser } from "@/model/user";
+import { ProfileUser } from "@/model/user";
 import Avartar from "./Avartar";
 import FollowButton from "./FollowButton";
 
 type Props = {
-  user: ProrfileUser;
+  user: ProfileUser;
 };
 
 export default function UserProfile({ user }: Props) {

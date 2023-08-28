@@ -1,16 +1,17 @@
 "use client";
 
-import { HomeUser, ProrfileUser } from "@/model/user";
-import useSWR from "swr";
+import { ProfileUser } from "@/model/user";
 import Button from "./Button";
+import useMe from "@/hooks/useMe";
 
 type Props = {
-  user: ProrfileUser;
+  user: ProfileUser;
 };
 
 export default function FollowButton({ user }: Props) {
   const { username } = user;
-  const { data: loggedInUser } = useSWR<HomeUser>("/api/me");
+  const { user: loggedInUser } = useMe();
+  // const { data: loggedInUser } = useSWR<HomeUser>("/api/me");
 
   // 로그인 안한사람 + 로그인한 사람과 현재 페이지의 유저이름이
   const showButton = loggedInUser && loggedInUser.username !== username;

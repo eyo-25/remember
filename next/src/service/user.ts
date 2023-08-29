@@ -39,7 +39,6 @@ export async function searchUsers(keyword?: string) {
   const query = keyword
     ? `&& (name match "${keyword}") || (username match "${keyword}")`
     : "";
-
   return client
     .fetch(
       `*[_type =="user" ${query}]{
@@ -52,13 +51,12 @@ export async function searchUsers(keyword?: string) {
     .then((users) =>
       users.map((user: SearchUser) => ({
         ...user,
-        followers: user.followers ?? 0,
         following: user.following ?? 0,
+        followers: user.followers ?? 0,
       }))
     );
 }
 
-// 입출력을 줄이기 위해 쿼리를 두번 사용
 export async function getUserForProfile(username: string) {
   return client
     .fetch(
@@ -66,7 +64,7 @@ export async function getUserForProfile(username: string) {
       ...,
       "id":_id,
       "following": count(following),
-      "followers": count(ffollowers),
+      "followers": count(followers),
       "posts": count(*[_type=="post" && author->username == "${username}"])
     }
     `
@@ -81,7 +79,7 @@ export async function getUserForProfile(username: string) {
 
 export async function addBookmark(userId: string, postId: string) {
   return client
-    .patch(userId)
+    .patch(userId) //
     .setIfMissing({ bookmarks: [] })
     .append("bookmarks", [
       {
@@ -97,4 +95,28 @@ export async function removeBookmark(userId: string, postId: string) {
     .patch(userId)
     .unset([`bookmarks[_ref=="${postId}"]`])
     .commit();
+}
+
+export async function follow(myId: string, targetId: string) {
+  return client
+    .transaction() //
+    .patch(myId, (user) =>
+      user
+        .setIfMissing({ following: [] })
+        .append("following", [{ _ref: targetId, _type: "reference" }])
+    )
+    .patch(targetId, (user) =>
+      user
+        .setIfMissing({ followers: [] })
+        .append("followers", [{ _ref: myId, _type: "reference" }])
+    )
+    .commit({ autoGenerateArrayKeys: true });
+}
+
+export async function unfollow(myId: string, targetId: string) {
+  return client
+    .transaction() //
+    .patch(myId, (user) => user.unset([`following[_ref=="${targetId}"]`]))
+    .patch(targetId, (user) => user.unset([`followers[_ref=="${myId}"]`]))
+    .commit({ autoGenerateArrayKeys: true });
 }

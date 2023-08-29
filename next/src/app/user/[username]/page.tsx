@@ -16,6 +16,8 @@ export default async function UserPage({ params: { username } }: Props) {
     notFound();
   }
 
+  console.log(user);
+
   return (
     <section className="w-full">
       <UserProfile user={user} />

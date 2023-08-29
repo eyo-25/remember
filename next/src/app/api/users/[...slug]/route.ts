@@ -1,19 +1,18 @@
 import { getLikedPostsOf, getPostsOf, getSavedPostsOf } from "@/service/posts";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 type Context = {
   params: {
     slug: string[];
   };
 };
-
-export const dynamic = "force-dynamic";
-
 export async function GET(_: NextRequest, context: Context) {
   const { slug } = context.params;
 
   if (!slug || !Array.isArray(slug) || slug.length < 2) {
-    return new NextResponse("Bad Requst", { status: 400 });
+    return new NextResponse("Bad Request", { status: 400 });
   }
 
   const [username, query] = slug;

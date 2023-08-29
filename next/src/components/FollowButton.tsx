@@ -1,35 +1,55 @@
 "use client";
 
-import { ProfileUser } from "@/model/user";
-import Button from "./Button";
 import useMe from "@/hooks/useMe";
+import { ProfileUser } from "@/model/user";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { PulseLoader } from "react-spinners";
+import Button from "./Button";
 
 type Props = {
   user: ProfileUser;
 };
-
 export default function FollowButton({ user }: Props) {
   const { username } = user;
-  const { user: loggedInUser } = useMe();
-  // const { data: loggedInUser } = useSWR<HomeUser>("/api/me");
+  const { user: loggedInUser, toggleFollow } = useMe();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [isFetching, setIsFetching] = useState(false);
+  const isUpdating = isPending || isFetching;
 
-  // 로그인 안한사람 + 로그인한 사람과 현재 페이지의 유저이름이
   const showButton = loggedInUser && loggedInUser.username !== username;
   const following =
     loggedInUser &&
     loggedInUser.following.find((item) => item.username === username);
 
   const text = following ? "Unfollow" : "Follow";
+
+  const handleFollow = async () => {
+    setIsFetching(true);
+    await toggleFollow(user.id, !following);
+    setIsFetching(false);
+    startTransition(() => {
+      router.refresh();
+    });
+  };
+
   return (
     <>
       {showButton && (
-        <Button
-          text={text}
-          onClick={() => {}}
-          style={
-            text === "Unfollow" ? "bg-red-500 px-8 leading-4 font-bold" : ""
-          }
-        />
+        <div className="relative">
+          {isUpdating && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center">
+              <PulseLoader size={6} />
+            </div>
+          )}
+          <Button
+            disabled={isUpdating}
+            text={text}
+            onClick={handleFollow}
+            red={text === "Unfollow"}
+          />
+        </div>
       )}
     </>
   );

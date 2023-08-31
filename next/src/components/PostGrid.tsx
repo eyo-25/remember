@@ -1,21 +1,13 @@
 import useSWR from "swr";
 import GridSpinner from "./GridSpinner";
-import { SimplePost } from "@/model/post";
 import PostGridCard from "./PostGridCard";
-
-type Props = {
-  username: string;
-  query: string;
-};
+import usePosts from "@/hooks/usePosts";
+import { useCashKeys } from "@/app/context/CacheKeyContext";
 
 export const dynamic = "force-dynamic";
 
-export default function PostGrid({ username, query }: Props) {
-  const {
-    data: posts,
-    isLoading,
-    error,
-  } = useSWR<SimplePost[]>(`/api/users/${username}/${query}`);
+export default function PostGrid() {
+  const { posts, isLoading } = usePosts();
 
   return (
     <div className="relative w-full text-center aspect-square">

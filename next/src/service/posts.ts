@@ -1,6 +1,5 @@
 import { SimplePost } from "./../model/post";
-import { client, urlFor } from "./sanity";
-import { Comment } from "@/model/post";
+import { assetsURL, client, urlFor } from "./sanity";
 
 const simplePostProjection = `
     ...,
@@ -83,7 +82,7 @@ function mapPosts(posts: SimplePost[]) {
 
 export async function likePost(postId: string, userId: string) {
   return client
-    .patch(postId)
+    .patch(postId) //
     .setIfMissing({ likes: [] })
     .append("likes", [
       {
@@ -104,10 +103,10 @@ export async function dislikePost(postId: string, userId: string) {
 export async function addComment(
   postId: string,
   userId: string,
-  comment: Comment
+  comment: string
 ) {
   return client
-    .patch(postId)
+    .patch(postId) //
     .setIfMissing({ comments: [] })
     .append("comments", [
       {
@@ -116,4 +115,35 @@ export async function addComment(
       },
     ])
     .commit({ autoGenerateArrayKeys: true });
+}
+
+export async function createPost(userId: string, text: string, file: Blob) {
+  console.log(userId, text, file);
+
+  return fetch(assetsURL, {
+    method: "POST",
+    headers: {
+      "content-type": file.type,
+      authorization: `Bearer ${process.env.SANITY_SECRET_TOKEN}`,
+    },
+    body: file,
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      return client.create(
+        {
+          _type: "post",
+          author: { _ref: userId },
+          photo: { asset: { _ref: result.document._id } },
+          comments: [
+            {
+              comment: text,
+              author: { _ref: userId, _type: "reference" },
+            },
+          ],
+          likes: [],
+        },
+        { autoGenerateArrayKeys: true }
+      );
+    });
 }

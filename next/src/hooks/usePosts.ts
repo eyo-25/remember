@@ -1,9 +1,10 @@
+import { useCashKeys } from "@/app/context/CacheKeyContext";
 import { Comment, SimplePost } from "@/model/post";
 import { useCallback } from "react";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 
 async function updateLike(id: string, like: boolean) {
-  return fetch("api/likes", {
+  return fetch("/api/likes", {
     method: "PUT",
     body: JSON.stringify({ id, like }),
   }).then((res) => res.json());
@@ -17,12 +18,14 @@ async function addComment(id: string, comment: Comment) {
 }
 
 export default function usePosts() {
+  const cashKeys = useCashKeys();
+  console.log(cashKeys);
   const {
     data: posts,
     isLoading,
     error,
     mutate,
-  } = useSWR<SimplePost[]>("/api/posts");
+  } = useSWR<SimplePost[]>(cashKeys.postsKey);
 
   const setLike = useCallback(
     (post: SimplePost, username: string, like: boolean) => {
@@ -34,6 +37,7 @@ export default function usePosts() {
       };
 
       const newPosts = posts?.map((p) => (p.id === post.id ? newPost : p));
+
       return mutate(updateLike(post.id, like), {
         optimisticData: newPosts,
         populateCache: false,

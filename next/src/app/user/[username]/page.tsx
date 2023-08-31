@@ -5,6 +5,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
+export const dynamic = "force-dynamic";
+
 type Props = { params: { username: string } };
 
 const getUser = cache(async (username: string) => getUserForProfile(username));
@@ -15,8 +17,6 @@ export default async function UserPage({ params: { username } }: Props) {
   if (!user) {
     notFound();
   }
-
-  console.log(user);
 
   return (
     <section className="w-full">

@@ -9,12 +9,7 @@ import { PropagateLoader } from "react-spinners";
 export default function FollowingBar() {
   const { user, isLoading: loading, error } = useMe();
 
-  const users = user?.following && [
-    ...user?.following,
-    ...user?.following,
-    ...user?.following,
-    ...user?.following,
-  ];
+  const users = user?.following && [...user?.following];
 
   return (
     <section className="relative z-0 w-full flex justify-center items-center p-4 shadow-sm shadow-neutral-300 mb-4 rounded-lg min-h-[90px] overflow-x-auto">

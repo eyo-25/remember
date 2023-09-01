@@ -19,7 +19,6 @@ async function addComment(id: string, comment: Comment) {
 
 export default function usePosts() {
   const cashKeys = useCashKeys();
-  console.log(cashKeys);
   const {
     data: posts,
     isLoading,

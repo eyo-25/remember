@@ -41,12 +41,14 @@ export default function ActionBar({ post, children, onComment }: Props) {
           offIcon={<HeartIcon />}
           toggled={liked}
           onToggle={handleLike}
+          title={liked ? "unlike" : "like"}
         />
         <ToggleButton
           onIcon={<BookmarkFillIcon />}
           offIcon={<BookmarkIcon />}
           toggled={bookmarked}
           onToggle={handleBookmark}
+          title={liked ? "unbookmark" : "bookmark"}
         />
       </div>
       <div className="mx-4">
